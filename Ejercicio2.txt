@@ -1,0 +1,1 @@
+declaracionJurada = input("Declaracion jurada: ")
