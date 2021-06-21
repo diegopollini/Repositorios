@@ -1,5 +1,5 @@
 datosIngreso = []
-parcial = 1
+parcial = 0
 parcial1 = 0
 parcial2 = 0
 parcial3 = 0
