@@ -1,5 +1,5 @@
 import math
-edad = int(input("Edad: "))
+edad = int(input("Edad usuario: "))
 declaracionJurada = int(input("Declaración jurada: "))
 
 if (edad>18 and declaracionJurada>20000):
