@@ -18,7 +18,7 @@ raiz.config(bg="gray") #Asigno color de fondo
 miFrame = Frame(raiz)
 
 #Empaqueto el frame dentro de la raiz
-miFrame.pack(side="left", anchor="n") #'side' establece la ubicación del frame, 'anchor' define con puntos cardinales. En este caso a la izquierda y arriba
+miFrame.pack(side="right", anchor="n") #'side' establece la ubicación del frame, 'anchor' define con puntos cardinales. En este caso a la izquierda y arriba
 
 #Atributos del frame
 miFrame.config(width="400", height="640") #Defino tamaño

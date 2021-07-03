@@ -25,9 +25,10 @@ def main():
     # Formateo de cadena f'{variable:.1f}' para dejar la variable con un solo decimal
     temperatura = f'{infoClima["list"][0]["main"]["temp"]:.1f}'
     humedad = infoClima["list"][0]["main"]["humidity"]
-    print(f"Ciudad: {ciudad}")
-    print(f"Temperatura {temperatura} °C")
-    print(f"Humedad {humedad} %")
+    #print(f"Ciudad: {ciudad}")
+    #print(f"Temperatura {temperatura} °C")
+    #print(f"Humedad {humedad} %")
+    print (infoClima)
     
 #FUNCION PRINCIPAL
 if (__name__=="__main__"):
