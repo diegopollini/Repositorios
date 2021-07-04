@@ -19,7 +19,7 @@ def main():
     print("PUNTO 2. RECUPERAR LA FECHA DE LA ULTIMA ACTUALIZACIÓN")
     cadenaFecha = datos["Global"]["Date"]
     #print (cadenaFecha)
-    cadenaFechaRecortada = cadenaFecha[0:19]
+    cadenaFechaRecortada = cadenaFecha[0:19] #Recorto la cadena porque al final aparece un identificador variable
     #print (cadenaFechaRecortada)
     formato = "%Y-%m-%dT%H:%M:%S"
     fecha = time.strptime(cadenaFechaRecortada, formato)
