@@ -3,6 +3,8 @@
 # https://docs.google.com/spreadsheets/d/1NpzJARb8qkofgUC0I_rkzun1pmHG7s14tg1M0H11TFY/edit#gid=0
 
 import json
+import os
+import dotenv.main
 import pandas as pd
 from sqlalchemy import create_engine
 import pymysql
