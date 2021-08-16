@@ -1,28 +1,98 @@
+import os
+from dotenv import load_dotenv
 import requests as req
-from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
+load_dotenv()
 
-SERVIDOR = "pad19.com:3030/productos/10"
-USUARIO = "adimra"
-CLAVE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJub21icmUiOiJhbHVtbm8ifQ.eC452_kHQbCP4wDVvN6nl5Vx8V6HhQP8D5EljApFXS8"
-BBDD = "adimra_introprog21"
+SERVIDOR = os.getenv("SERVIDOR")
+ENDPOINT_PEDIDOS = os.getenv("ENDPOINT_PEDIDOS")
+ENDPOINT_PRODUCTOS = os.getenv("ENDPOINT_PRODUCTOS")
+ENDPOINT_CONSULTA_PEDIDOS = os.getenv("ENDPOINT_CONSULTA_PEDIDOS")
+TOKEN = os.getenv ("TOKEN")
 
-# Funciones
-def conectarMysql():
-	motorMysql = create_engine(f"mysql+pymysql://{USUARIO}:{CLAVE}@{SERVIDOR}/{BBDD}", pool_recycle=3600)
-	conn = motorMysql.connect()
+def consultaProductos():
+	URL_CONSULTA_PRODUCTO = f"{SERVIDOR}/{ENDPOINT_PRODUCTOS}?{TOKEN}"
+	
+	consultaListaProductos = req.get(URL_CONSULTA_PRODUCTO)
 
-	if (conn):
-		return conn
+	if (consultaListaProductos.status_code == 200):
+		print("Conexión establecida")
+		resultado = consultaListaProductos.json()
+		print(resultado)
 	else:
-		return False
+		print("Falso")
 
+def cargaPedidos():
+	while(True):
+		print("---------------------------------------------------------------------------)")
+		print("ABM PEDIDOS")
+		print("Presione # para concluir")
 
-# Main
-if (__name__ == "__main__"):
-	resultado = conectarMysql()
+		idProducto = input("Ingrese código del producto: ")
+		if (idProducto =="#"):
+			break
+		cantProducto = input ("Ingrese cantidad:")
+		
+		if (cantProducto == "#"):
+			break
+		
+		cadenaJSON = {"id": idProducto, "cantidad":cantProducto}
 
-	if (resultado):
-		print("Conectado a la bbdd, listo para consultas")
-	else:
-		print("Error al conectar con la bbdd")
+		URL_PEDIDO = f"{SERVIDOR}/{ENDPOINT_PEDIDOS}?{TOKEN}"
+
+		pedido = req.post(URL_PEDIDO, cadenaJSON)
+
+		if (pedido.status_code == 200):
+			ordenPedido = pedido.json()
+			print (ordenPedido["mensaje"]," con N°: ",ordenPedido["codigo"])
+	
+		else:
+			print("Falso")
+
+def consultasPedidos():
+	while(True):
+		print("---------------------------------------------------------------------------)")
+		print("CONSULTA PEDIDOS")
+		print("Presione # para concluir")
+	
+		idPedido= (input("Ingrese número de pedido: "))
+		if (idPedido =="#"):
+    			break
+		URL_CONSULTA_PEDIDO = f"{SERVIDOR}/{ENDPOINT_CONSULTA_PEDIDOS}{idPedido}?{TOKEN}"
+		consultaPedidos = req.get(URL_CONSULTA_PEDIDO)
+
+		if (consultaPedidos.status_code == 200):
+			detallePedido = consultaPedidos.json()
+			#print(detallePedido)
+			print("Pedido N°: ", idPedido)
+			print("Código Producto: ",detallePedido["productos"]["id"])
+			print("Cantidad: ", detallePedido["productos"]["cantidad"])
+		else:
+			print("Falso")
+
+		idProducto = int(detallePedido["productos"]["id"])
+		cantProducto = int(detallePedido["productos"]["cantidad"])
+		
+		URL_CONSULTA_PRODUCTO = f"{SERVIDOR}/{ENDPOINT_PRODUCTOS}?{TOKEN}"
+		consultaListaProductos = req.get(URL_CONSULTA_PRODUCTO)
+
+		resultado = consultaListaProductos.json()
+
+		print(resultado)
+		producto = resultado["productos"][idProducto-1]["id"]
+		stock = resultado["productos"][idProducto-1]["stock"]
+		print("El stock del producto: ", producto, "es: ", stock)
+
+		if (stock >= cantProducto):
+    			print("El pedido se puede procesar")
+		else:
+    			print("La cantidad pedida supera el stock en el almacén")
+
+    	
+
+def main():
+	consultaProductos()
+	cargaPedidos()
+	consultasPedidos()
+
+if (__name__=="__main__"):
+    main()
